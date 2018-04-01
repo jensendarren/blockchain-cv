@@ -1,23 +1,40 @@
 pragma solidity ^0.4.18;
 
-import "CVExtender.sol";
+import "./CVExtender.sol";
 
-contract Example is CVExtender {
+contract CVContract is CVExtender {
+    //Add experiences
+    struct Experience {
+        string title;
+        string description;
+        int fromDate;
+        int toDate;
+        string location;
+    }
 
-    /**
-     * Your functions go here
-     *
-     * */
+    event ExperienceAddedEvent(uint256 counter, string title, string description, int fromDate, int toDate, string location);
 
-    // function MyFunction1() {}
-    // function MyFunction2() {}
+    mapping (uint256 => Experience) public experiences;
 
+    uint256 public experienceCounter;
+
+    function addNewExperience(string newTitle, string newDescription, int newFromDate, int newToDate, string newLocation) public {
+        require(newToDate < newFromDate);
+
+        Experience memory newExperience = Experience({title: newTitle, description: newDescription, fromDate: newFromDate, toDate: newToDate, location: newLocation});
+
+        experienceCounter++;
+
+        experiences[experienceCounter] = newExperience;
+
+        ExperienceAddedEvent(experienceCounter, newTitle, newDescription, newFromDate, newToDate, newLocation);
+    }
 
     /**
      * Below is for our CV!
      * */
     function getAddress() public view returns(string) {
-        return "http://www.example.org";
+        return "www.tweetegy.com";
     }
 
     function getDescription() public view returns(string) {
