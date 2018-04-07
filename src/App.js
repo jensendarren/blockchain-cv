@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import CVContract from '../build/contracts/CVContract.json'
 import getWeb3 from './utils/getWeb3'
+import HeaderValue from './components/HeaderValue'
 
 import './css/oswald.css'
 import './css/open-sans.css'
@@ -89,20 +90,20 @@ class App extends Component {
     return (
       <div className="App">
         <nav className="navbar pure-menu pure-menu-horizontal">
-            <a href="#" className="pure-menu-heading pure-menu-link">Truffle Box</a>
+            <a href="#" className="pure-menu-heading pure-menu-link">My CV on the Blockchain!</a>
         </nav>
 
         <main className="container">
           <div className="pure-g">
             <div className="pure-u-1-1">
-              <h1>Good to Go!</h1>
-              <p>Your Truffle Box is installed and ready.</p>
-              <h2>CV Contract Example</h2>
-              <p>The address value is: {this.state.address}</p>
-              <p>The title value is: {this.state.title}</p>
-              <p>The description value is: {this.state.description}</p>
-              <p>The author name is: {this.state.author_name}</p>
-              <p>The author email is: {this.state.author_email}</p>
+              <h1>Blockchain CV</h1>
+              <p>This is an example application that publishes my CV on the Ethereum Blockchain.</p>
+              <h2>Header Values</h2>
+              <HeaderValue label="Address" value={this.state.address} />
+              <HeaderValue label="Title" value={this.state.title} />
+              <HeaderValue label="Description" value={this.state.description} />
+              <HeaderValue label="Author Name" value={this.state.author_name} />
+              <HeaderValue label="Author Email" value={this.state.author_email} />
             </div>
           </div>
         </main>
