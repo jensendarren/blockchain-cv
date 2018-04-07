@@ -1,15 +1,15 @@
 pragma solidity ^0.4.18;
 
 contract owned {
-    address owner;
+  address owner;
 
-    modifier onlyowner() {
-        if (msg.sender == owner) {
-            _;
-		}
+  modifier onlyowner() {
+    if (msg.sender == owner) {
+      _;
     }
+  }
 
-    function owned() public {
-        owner = msg.sender;
-    }
+  function owned() public {
+    owner = msg.sender;
+  }
 }
