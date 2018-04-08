@@ -18,9 +18,6 @@ class App extends Component {
   }
 
   componentWillMount() {
-    // Get network provider and web3 instance.
-    // See utils/getWeb3 for more info.
-
     getWeb3
     .then(results => {
       this.setState({
@@ -40,50 +37,32 @@ class App extends Component {
     })
   }
 
-  instantiateContract() {
-    /*
-     * SMART CONTRACT EXAMPLE
-     *
-     * Normally these functions would be called in the context of a
-     * state management library, but for convenience I've placed them here.
-     */
+  async instantiateContract() {
+    //set contract vars
+    const truffleContract = require('truffle-contract')
+    const cvContract = truffleContract(CVContract)
+    //set web3 provider to connect to blockchain
+    cvContract.setProvider(this.state.web3.currentProvider)
+    
+    //wait for contract to be deployed and available
+    let cv = await cvContract.deployed();
+    
+    //get data from contract
+    let address = await cv.getAddress();
+    let title = await cv.getTitle();
+    let description = await cv.getDescription();
+    let author = await cv.getAuthor();
+    let experience = await cv.getExperience(0);
 
-    const contract = require('truffle-contract')
-    const cvContact = contract(CVContract)
-    cvContact.setProvider(this.state.web3.currentProvider)
+    console.log(experience);
 
-    // Declaring this for later so we can chain functions on SimpleStorage.
-    var cvInstance
+    //set state in react
+    this.setState({ address: address })
+    this.setState({ title: title })
+    this.setState({ description: description })
+    this.setState({ author_name: author[0] })
+    this.setState({ author_email: author[1] })
 
-    // Get accounts.
-    this.state.web3.eth.getAccounts((error, accounts) => {
-      cvContact.deployed().then((instance) => {
-        cvInstance = instance
-
-        // Get the address from the contract
-        return cvInstance.getAddress.call()
-      }).then((address) => {
-        // Update state with the address.
-        console.log(address);
-        this.setState({ address: address })
-        return cvInstance.getTitle()
-      }).then((title) => {
-        // Update state with the address.
-        console.log(title);
-        this.setState({ title: title })
-        return cvInstance.getDescription()
-      }).then((description) => {
-        // Update state with the description.
-        console.log(description);
-        this.setState({ description: description })
-        return cvInstance.getAuthor()
-      }).then((author) => {
-        // Update state with the author.
-        console.log(author);
-        this.setState({ author_name: author[0] })
-        this.setState({ author_email: author[1] })
-      })
-    })
   }
 
   render() {
@@ -104,6 +83,10 @@ class App extends Component {
               <HeaderValue label="Description" value={this.state.description} />
               <HeaderValue label="Author Name" value={this.state.author_name} />
               <HeaderValue label="Author Email" value={this.state.author_email} />
+            </div>
+            <div className="pure-u-1-1">
+              <h2>Professional Experience</h2>
+
             </div>
           </div>
         </main>
