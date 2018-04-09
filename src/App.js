@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import CVContract from '../build/contracts/CVContract.json'
 import getWeb3 from './utils/getWeb3'
 import HeaderValue from './components/HeaderValue'
+import Experience from './components/Experience'
 
 import './css/oswald.css'
 import './css/open-sans.css'
@@ -22,11 +23,12 @@ class App extends Component {
     .then(results => {
       this.setState({
         web3: results.web3,
-        address: "",
-        title: "",
-        description: "",
-        author_name: "",
-        author_email: ""
+        // address: "",
+        // title: "",
+        // description: "",
+        // author_name: "",
+        // author_email: "",
+        // experience: {}
       })
 
       // Instantiate contract once web3 provided.
@@ -45,16 +47,14 @@ class App extends Component {
     cvContract.setProvider(this.state.web3.currentProvider)
     
     //wait for contract to be deployed and available
-    let cv = await cvContract.deployed();
+    let cv = await cvContract.deployed()
     
     //get data from contract
-    let address = await cv.getAddress();
-    let title = await cv.getTitle();
-    let description = await cv.getDescription();
-    let author = await cv.getAuthor();
-    let experience = await cv.getExperience(0);
-
-    console.log(experience);
+    let address = await cv.getAddress()
+    let title = await cv.getTitle()
+    let description = await cv.getDescription()
+    let author = await cv.getAuthor()
+    let experienceItem = await cv.getExperience(1)
 
     //set state in react
     this.setState({ address: address })
@@ -63,6 +63,13 @@ class App extends Component {
     this.setState({ author_name: author[0] })
     this.setState({ author_email: author[1] })
 
+    //get experiences
+    var experience = {
+      title: experienceItem[0],
+      location: experienceItem[1],
+      from: experienceItem[2].c[0]
+    }
+    this.setState({ experience: experience })
   }
 
   render() {
@@ -86,7 +93,7 @@ class App extends Component {
             </div>
             <div className="pure-u-1-1">
               <h2>Professional Experience</h2>
-
+              <Experience {...this.state.experience} />
             </div>
           </div>
         </main>
